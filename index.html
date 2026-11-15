@@ -222,6 +222,53 @@
     background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);
   }
 
+  /* ---------- 小程序预约 ---------- */
+  .book{margin-top:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:.3s}
+  .book:hover{border-color:rgba(34,211,238,.4)}
+  .book .bico{
+    flex:0 0 auto;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:17px;
+    background:linear-gradient(150deg,rgba(34,211,238,.2),rgba(124,92,255,.2));
+    border:1px solid rgba(34,211,238,.3);
+  }
+  .book h3{font-size:14.5px;margin-bottom:2px}
+  .book p{font-size:12px;color:var(--sub)}
+  .btn-book{
+    margin-left:auto;flex:0 0 auto;border:0;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;
+    color:#06121a;padding:9px 16px;border-radius:999px;
+    background:linear-gradient(120deg,var(--cyan),#7fe6f7);
+    box-shadow:0 6px 20px -8px rgba(34,211,238,.85);transition:transform .25s,box-shadow .25s;
+  }
+  .btn-book:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(34,211,238,.95)}
+  .btn-book:active{transform:scale(.96)}
+
+  .sheet{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:22px}
+  .sheet.on{display:flex}
+  .sheet .mask{position:absolute;inset:0;background:rgba(3,5,10,.72);backdrop-filter:blur(6px);animation:fade .3s ease}
+  .sheet-card{
+    position:relative;width:100%;max-width:320px;padding:22px 20px 18px;border-radius:20px;text-align:center;
+    background:linear-gradient(180deg,#0e1524,#0a101c);border:1px solid rgba(34,211,238,.3);
+    box-shadow:0 30px 70px -30px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.03) inset;
+    animation:pop .34s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+  .sheet-card h3{font-size:15.5px;margin-bottom:4px}
+  .sheet-card .st{font-size:12px;color:var(--sub);margin-bottom:14px}
+  .qrwrap{
+    width:196px;height:196px;margin:0 auto 12px;border-radius:14px;background:#fff;display:grid;place-items:center;
+    overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 30px -18px #000;
+  }
+  .qrwrap img{width:100%;height:100%;object-fit:contain;display:block}
+  .qrwrap .ph{padding:10px;font-size:11.5px;line-height:1.6;color:#5a6a80;text-align:center}
+  .sheet-card .sh{font-size:12px;color:#bfe9f5;line-height:1.6}
+  .sheet-card .op{display:flex;gap:8px;margin-top:14px}
+  .sheet-card .op button{
+    flex:1;border:0;cursor:pointer;font-family:inherit;font-size:12.5px;padding:10px 6px;border-radius:11px;
+    background:rgba(255,255,255,.07);color:#dfeaf9;border:1px solid rgba(120,170,255,.18);transition:.25s;
+  }
+  .sheet-card .op button.primary{background:linear-gradient(120deg,var(--cyan),#7fe6f7);color:#06121a;font-weight:700;border-color:transparent}
+  .sheet-card .op button:active{transform:scale(.97)}
+
   /* ---------- 露出动效 ---------- */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
   .reveal.in{opacity:1;transform:none}
@@ -453,12 +500,39 @@
   <section id="contact">
     <div class="sec-head reveal"><span class="no">05</span><h2>登记与联系</h2><span class="bar"></span></div>
     <ul class="glass contact reveal" style="padding:6px 16px">
-      <li><span>开放时间</span>＿＿＿＿＿＿＿＿（以学院通知为准）</li>
-      <li><span>预约方式</span>经任课教师 / 管理员同意后登记或群内申请</li>
+      <li><span>开放时间</span>以学院通知为准</li>
+      <li><span>预约方式</span>微信小程序在线预约（见下方入口）</li>
       <li><span>故障报修</span>联系管理员并填写《设备维修登记表》</li>
     </ul>
+
+    <div class="book glass reveal">
+      <span class="bico">📅</span>
+      <div>
+        <h3>在线预约</h3>
+        <p>微信小程序 · 选择时段 · 提交即预约</p>
+      </div>
+      <button class="btn-book" id="btnBook" type="button">去预约</button>
+    </div>
+
     <div class="hint reveal">💡 建议点击浏览器菜单「添加到主屏幕」，下次一键直达；本页内容随制度更新，以线上版本为准。</div>
   </section>
+
+  <!-- 小程序码弹层 -->
+  <div class="sheet" id="mpSheet" aria-hidden="true">
+    <div class="mask" data-close></div>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-label="预约小程序">
+      <h3>预约小程序</h3>
+      <p class="st">选择实验时段 · 查看预约记录</p>
+      <div class="qrwrap" id="mpQrWrap">
+        <img id="mpCode" src="img/mini-code.png" alt="预约小程序码">
+      </div>
+      <p class="sh" id="mpHint">长按上方小程序码 → 识别小程序即可进入</p>
+      <div class="op">
+        <button type="button" data-close>关闭</button>
+        <button type="button" class="primary" id="btnCopyLink">复制小程序链接</button>
+      </div>
+    </div>
+  </div>
 
 </main>
 
@@ -518,6 +592,75 @@
     });
   }, {threshold:.01, rootMargin:'-45% 0px -50% 0px'});
   if(hasIO) secs.forEach(function(s){ if(s) nio.observe(s); });
+
+  /* ===== 微信小程序预约 ===== */
+  var MP = {
+    appId: '',                     // 小程序 AppID（微信内配合公众号 JS-SDK 才可一键跳转）
+    path: 'pages/booking/index',   // 小程序页面路径
+    shortLink: '',                 // 小程序短链，如 https://wxaurl.cn/xxxxxx（填了就能直接跳）
+    codeImg: 'img/mini-code.png'   // 小程序码图片，放在 img/ 下即可自动显示
+  };
+  var inWx = /MicroMessenger/i.test(navigator.userAgent);
+  var sheet = document.getElementById('mpSheet');
+  var btnBook = document.getElementById('btnBook');
+  var mpCode = document.getElementById('mpCode');
+  var mpHint = document.getElementById('mpHint');
+  var qrWrap = document.getElementById('mpQrWrap');
+
+  function openSheet(tip){
+    if(MP.shortLink && !inWx){
+      mpHint.textContent = '当前不在微信内：请长按小程序码识别，或在微信中打开本页。';
+    } else if(tip){
+      mpHint.textContent = tip;
+    }
+    if(sheet){ sheet.classList.add('on'); sheet.setAttribute('aria-hidden','false'); }
+  }
+  function closeSheet(){
+    if(sheet){ sheet.classList.remove('on'); sheet.setAttribute('aria-hidden','true'); }
+  }
+
+  if(mpCode){
+    mpCode.addEventListener('error', function(){
+      qrWrap.innerHTML = '<div class="ph">小程序码待配置<br>把小程序码保存为<br><b>img/mini-code.png</b><br>即可自动显示</div>';
+    });
+    if(MP.codeImg && mpCode.getAttribute('src') !== MP.codeImg) mpCode.src = MP.codeImg;
+  }
+
+  if(btnBook){
+    btnBook.addEventListener('click', function(){
+      if(MP.shortLink && inWx){ window.location.href = MP.shortLink; return; }
+      openSheet(MP.shortLink ? '' : '长按小程序码识别进入；管理员在页面中填写小程序码或短链后自动生效。');
+    });
+  }
+
+  if(sheet){
+    sheet.addEventListener('click', function(e){
+      if(e.target.hasAttribute('data-close')) closeSheet();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeSheet();
+    });
+  }
+
+  var btnCopy = document.getElementById('btnCopyLink');
+  if(btnCopy){
+    btnCopy.addEventListener('click', function(){
+      var link = MP.shortLink || location.href;
+      var done = function(){
+        var old = btnCopy.textContent;
+        btnCopy.textContent = '已复制';
+        setTimeout(function(){ btnCopy.textContent = old; }, 1400);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(link).then(done, done);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = link; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(err) {}
+        document.body.removeChild(ta); done();
+      }
+    });
+  }
 
   /* 手风琴：同时只展开一台设备 */
   var devs = [].slice.call(document.querySelectorAll('details.dev'));
