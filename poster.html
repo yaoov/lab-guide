@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实验室扫码入口 · 海报生成</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{--brand:#0f4c81;--warn:#c92a2a;--ink:#1c2333}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#eef1f6;color:var(--ink);
+       line-height:1.7;padding:24px 14px}
+  .tool{max-width:680px;margin:0 auto 26px;background:#fff;border-radius:14px;padding:20px;
+        box-shadow:0 2px 10px rgba(20,35,60,.1)}
+  .tool h1{font-size:18px;margin-bottom:6px}
+  .tool p{font-size:13px;color:#5b6472;margin-bottom:12px}
+  .tool input{width:100%;font-size:15px;padding:11px 13px;border:1px solid #ccd4df;border-radius:9px;outline:none}
+  .tool input:focus{border-color:var(--brand)}
+  .tool .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  button{cursor:pointer;border:none;border-radius:9px;padding:11px 20px;font-size:15px;font-weight:600;color:#fff;
+         background:var(--brand)}
+  button.gray{background:#5b6472}
+  #qerr{color:var(--warn);font-size:13px;margin-top:10px;display:none}
+
+  /* 海报（打印区） */
+  .poster{max-width:680px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;
+          box-shadow:0 2px 10px rgba(20,35,60,.1)}
+  .head{background:linear-gradient(135deg,#0d3a61,#176fae);color:#fff;text-align:center;padding:38px 20px 30px}
+  .head .tag{display:inline-block;font-size:12px;letter-spacing:2px;border:1px solid rgba(255,255,255,.4);
+             background:rgba(255,255,255,.15);border-radius:999px;padding:3px 14px;margin-bottom:14px}
+  .head h2{font-size:24px;letter-spacing:1px}
+  .head .theme{margin-top:8px;font-size:14px;color:#ffd8a8;font-weight:600}
+  .qrbox{text-align:center;padding:34px 20px 10px}
+  #qrcode{display:inline-block;padding:14px;border:3px solid var(--brand);border-radius:16px;background:#fff}
+  .qrbox .scan{margin-top:16px;font-size:20px;font-weight:700;letter-spacing:2px}
+  .qrbox .hint{font-size:13px;color:#5b6472;margin-top:4px}
+  .points{padding:22px 34px 8px}
+  .points li{list-style:none;position:relative;padding-left:22px;margin:9px 0;font-size:15px}
+  .points li::before{content:"";position:absolute;left:4px;top:.7em;width:8px;height:8px;border-radius:50%;
+                     background:var(--warn)}
+  .foot{background:#fdecec;color:#8c1d1d;text-align:center;font-size:14px;font-weight:600;padding:14px}
+  .brand-foot{background:#0d3a61;color:rgba(255,255,255,.85);text-align:center;font-size:12px;padding:14px;line-height:1.9}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .tool{display:none}
+    .poster{box-shadow:none;border-radius:0;max-width:100%}
+    .head{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .foot,.brand-foot{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<div class="tool">
+  <h1>二维码海报生成工具</h1>
+  <p>第 1 步：把 <b>lab-guide/index.html</b> 连同本页面上传到校园服务器 / 学院网站 / GitHub Pages 等任意可访问的位置，
+     得到网址（建议用手机实际访问一次确认可用）。</p>
+  <p>第 2 步：把网址填到下面，点击生成二维码 → 点击打印，贴在实验室门口即可扫码。</p>
+  <input id="url" type="text" placeholder="例如：https://lab.school.edu.cn/lab-guide/index.html">
+  <div class="row">
+    <button onclick="make()">生成二维码</button>
+    <button class="gray" onclick="window.print()">打印海报</button>
+  </div>
+  <p id="qerr"></p>
+</div>
+
+<div class="poster">
+  <div class="head">
+    <span class="tag">扫码即阅 · 入室必读</span>
+    <h2>实验室使用规范与操作指南</h2>
+    <p class="theme">「 一片芯片的诞生 」 半导体工艺与集成电路测试实训实验室</p>
+  </div>
+  <div class="qrbox">
+    <div id="qrcode"><div style="width:220px;height:220px;display:flex;align-items:center;justify-content:center;color:#9aa4b2;font-size:13px">在上方输入网址后<br>点击「生成二维码」</div></div>
+    <p class="scan">📱 微信 / 相机 扫一扫</p>
+    <p class="hint">入室须知 · 设备操作 · 应急处置 · 一页全览</p>
+  </div>
+  <ul class="points">
+    <li>进入实验室必须先完成安全培训，未培训不得独立操作设备</li>
+    <li>真空工艺开机顺序：冷水机 → 喷淋塔 → 主机，关机顺序相反</li>
+    <li>高压设备运行时，人员须在安全护栏外观察</li>
+    <li>实验室内严禁饮食；长发束起，按岗位要求穿防护服</li>
+    <li>静电敏感操作前，先佩戴防静电腕带并确认接地</li>
+    <li>发生异常：先断源、先救人、先报告，不隐瞒不擅自处理</li>
+  </ul>
+  <div class="foot">⚠ 安全第一 · 违规操作将取消实验室使用资格</div>
+  <div class="brand-foot">
+    半导体工艺与集成电路测试实训实验室<br>
+    使用规范 · 安全注意事项 · 设备操作指南（线上版随时更新）
+  </div>
+</div>
+
+<script>
+function make(){
+  var url = document.getElementById('url').value.trim();
+  var err = document.getElementById('qerr');
+  var box = document.getElementById('qrcode');
+  err.style.display = 'none';
+  if(!url){ err.textContent = '请先填写网址'; err.style.display = 'block'; return; }
+  if(!/^https?:\/\//i.test(url)){ url = 'http://' + url; document.getElementById('url').value = url; }
+  if(typeof QRCode === 'undefined'){
+    err.textContent = '二维码库未加载（需联网）。可改用微信「文件传输助手」或任意二维码生成工具，把网址转为二维码后替换海报中央图案。';
+    err.style.display = 'block'; return;
+  }
+  box.innerHTML = '';
+  new QRCode(box, { text: url, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+}
+</script>
+
+</body>
+</html>

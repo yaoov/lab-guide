@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>一片芯片的诞生 · 实验室使用规范与操作指南</title>
+<meta name="description" content="半导体工艺与集成电路测试实训实验室 入室须知、设备操作规范与应急处置指南">
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#1c2333; --sub:#5b6472;
+    --brand:#0f4c81; --brand2:#123f66; --accent:#e8590c; --ok:#2b8a3e; --warn:#c92a2a;
+    --line:#e4e8ef; --radius:14px;
+    --shadow:0 2px 10px rgba(20,35,60,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  header{background:linear-gradient(135deg,#0d3a61 0%,#0f4c81 55%,#176fae 100%);color:#fff;
+         padding:34px 18px 26px;text-align:center}
+  header .tag{display:inline-block;font-size:12px;letter-spacing:2px;background:rgba(255,255,255,.16);
+              border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 14px;margin-bottom:14px}
+  header h1{font-size:22px;font-weight:700;letter-spacing:1px}
+  header p{margin-top:10px;font-size:13px;color:rgba(255,255,255,.85)}
+  header .theme{margin-top:6px;font-size:13px;color:#ffd8a8;font-weight:600}
+  nav{position:sticky;top:0;z-index:50;background:rgba(15,76,129,.97);backdrop-filter:blur(6px);
+      display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  nav a{flex:0 0 auto;color:#fff;text-decoration:none;font-size:14px;padding:12px 16px;white-space:nowrap;
+        border-bottom:3px solid transparent}
+  nav a:active,nav a:hover{background:rgba(255,255,255,.12);border-bottom-color:#ffd8a8}
+  main{max-width:720px;margin:0 auto;padding:16px 14px 40px}
+  section{margin-top:22px;scroll-margin-top:60px}
+  h2{font-size:19px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  h2 .dot{width:10px;height:10px;border-radius:3px;background:var(--brand);flex:0 0 auto}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+        padding:16px;margin-bottom:12px;border:1px solid var(--line)}
+  .card h3{font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .card h3 .ico{font-size:18px}
+  ul.rules{list-style:none}
+  ul.rules li{position:relative;padding-left:20px;margin:7px 0;color:#2a3140}
+  ul.rules li::before{content:"";position:absolute;left:4px;top:.72em;width:7px;height:7px;
+        border-radius:50%;background:var(--brand)}
+  .badge{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;margin-right:6px}
+  .b-blue{background:#e7f1fb;color:var(--brand)}
+  .b-green{background:#e6f7ec;color:var(--ok)}
+  .b-red{background:#fdecec;color:var(--warn)}
+  .b-orange{background:#fff0e3;color:var(--accent)}
+  /* 禁止事项 */
+  .ban li::before{background:var(--warn)!important}
+  .ban li{color:#8c1d1d}
+  /* 折叠面板 */
+  details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+          box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden}
+  details summary{list-style:none;cursor:pointer;padding:14px 16px;font-size:16px;font-weight:600;
+                  display:flex;align-items:center;justify-content:space-between;gap:10px}
+  details summary::-webkit-details-marker{display:none}
+  details summary .arrow{color:#9aa4b2;font-size:14px;transition:transform .2s}
+  details[open] summary .arrow{transform:rotate(90deg)}
+  details summary .step{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:var(--brand);
+        color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+  details .body{padding:2px 16px 14px;border-top:1px dashed var(--line)}
+  details .body p{margin:8px 0;color:#2a3140;font-size:15px}
+  details .body ul.rules li{font-size:15px}
+  .alert{border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;font-size:15px}
+  .alert-red{background:#fdecec;border:1px solid #f5b5b5;color:#8c1d1d}
+  .alert-blue{background:#e7f1fb;border:1px solid #b9d7f2;color:#123f66}
+  .emergency{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .emergency .item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+        padding:14px;text-align:center;box-shadow:var(--shadow)}
+  .emergency .item b{display:block;font-size:22px;color:var(--warn);letter-spacing:1px}
+  .emergency .item span{font-size:13px;color:var(--sub)}
+  .tel{background:linear-gradient(135deg,#c92a2a,#e8590c);color:#fff;border-radius:var(--radius);
+       padding:16px;text-align:center;box-shadow:var(--shadow)}
+  .tel b{font-size:20px;letter-spacing:2px}
+  .tel p{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px}
+  .blank{color:var(--accent);font-weight:700}
+  footer{text-align:center;color:var(--sub);font-size:12px;padding:26px 16px 34px;line-height:1.8}
+  footer .labname{font-weight:700;color:#3a4456}
+  .topline{height:4px;background:linear-gradient(90deg,var(--warn) 0 33%,var(--accent) 33% 66%,var(--brand) 66% 100%)}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+
+<header>
+  <span class="tag">扫码即阅 · 入室必读</span>
+  <h1>半导体工艺与集成电路测试实训实验室</h1>
+  <p class="theme">「 一片芯片的诞生 」 · 半导体工艺与集成电路测试一体化实训平台</p>
+  <p>使用规范 · 安全注意事项 · 设备操作指南</p>
+</header>
+
+<nav>
+  <a href="#notice">入室须知</a>
+  <a href="#general">通用规范</a>
+  <a href="#devices">设备操作</a>
+  <a href="#forbid">禁止事项</a>
+  <a href="#emergency">应急处置</a>
+  <a href="#contact">联系登记</a>
+</nav>
+
+<main>
+
+  <div class="alert alert-red">
+    <b>安全第一。</b>本实验室含高压真空设备与废气处理系统，进入即视为已阅读并同意本指南全部条款。
+    未完成安全培训<strong>不得</strong>独立操作任何工艺设备。
+  </div>
+
+  <!-- 入室须知 -->
+  <section id="notice">
+    <h2><span class="dot"></span>一、入室须知</h2>
+    <div class="card">
+      <h3><span class="ico">🧥</span>着装与防护</h3>
+      <ul class="rules">
+        <li>穿长裤、包跟鞋子进入实验室，禁止拖鞋、高跟鞋、短裤、短裙。</li>
+        <li>长发须束起；进入工艺区须按岗位要求穿着实验服/防护服，佩戴护目镜。</li>
+        <li>操作静电敏感器件（芯片、探针台、参数分析仪）前，须先佩戴防静电腕带并确认接地。</li>
+        <li>实验室<strong>严禁饮食、吸烟</strong>，食品饮料不得带入。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📋</span>进入流程</h3>
+      <ul class="rules">
+        <li>预约/经指导教师同意后方可进入，进入时在《实验室使用登记本》上登记姓名、时间、事由。</li>
+        <li>首次进入须由教师或实验室管理员带领，完成安全交底。</li>
+        <li>留意安全出口、灭火器、紧急洗眼器、急救箱的位置（门口墙面均有标识）。</li>
+        <li>离开前：清理台面、关闭水电气、设备复位，登记离开时间并请管理员确认。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 通用规范 -->
+  <section id="general">
+    <h2><span class="dot"></span>二、通用安全规范</h2>
+    <div class="card">
+      <h3><span class="ico">⚡</span>用电与高压设备</h3>
+      <ul class="rules">
+        <li>真空镀膜主机等高压设备工作时，人体须保持在安全护栏外，禁止跨越护栏触碰设备。</li>
+        <li>发现设备冒烟、异响、异味、跳闸，立即停机并报告管理员，严禁带故障继续使用。</li>
+        <li>禁止湿手触碰电源开关；禁止私拉乱接插线板或多设备共用一个插座。</li>
+        <li>测试区设备须确认接地良好后再上电。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🌬️</span>通风与废气处理</h3>
+      <ul class="rules">
+        <li>真空工艺开机前，先确认 PP 喷淋净化塔与冷水机组处于运行状态。</li>
+        <li>使用通风橱时，操作窗口保持在安全标线以下，实验结束后风机继续运行数分钟再关闭。</li>
+        <li>通风橱内不得堆放杂物，不得作为储存柜使用。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🧯</span>消防与通道</h3>
+      <ul class="rules">
+        <li>保持安全通道畅通，防护服挂架、灭火器、洗眼器周边 1 米内不得堆放物品。</li>
+        <li>消防器材与防护用品仅限应急使用，禁止挪作他用。</li>
+        <li>最后离开者须检查：设备断电、水阀关闭、门窗锁闭。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 设备操作 -->
+  <section id="devices">
+    <h2><span class="dot"></span>三、设备操作指南（点击展开）</h2>
+
+    <details open>
+      <summary><span class="step">1</span>真空薄膜沉积主机<span class="arrow">▶</span></summary>
+      <div class="body">
+        <p><span class="badge b-orange">高危设备</span><span class="badge b-blue">须培训后使用</span></p>
+        <ul class="rules">
+          <li>仅限完成专项培训并经教师/管理员许可的人员操作，操作时须有第二人在场。</li>
+          <li>开机顺序：先开冷水机组 → 再开 PP 喷淋净化塔 → 最后开真空主机。</li>
+          <li>关机顺序与开机相反：主机 → 喷淋塔 → 冷水机，确认管路无异常后再离人。</li>
+          <li>运行期间在护栏外观察并记录工艺参数（真空度、时间、温度），不得离开现场。</li>
+          <li>严禁擅自修改工艺参数与程序；如需变更须经指导教师批准。</li>
+          <li>出现真空度异常、报警提示，立即按规程停机并报告，不得盲目重启。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">2</span>冷水机组与 PP 喷淋净化塔<span class="arrow">▶</span></summary>
+      <div class="body">
+        <ul class="rules">
+          <li>每次开机前检查水位、管路连接与阀门状态，发现渗漏立即停用并报告。</li>
+          <li>喷淋塔风机运行正常（无异响、无倒转）方可进行工艺操作。</li>
+          <li>冬季长时间停用须按管理员要求放空管路存水，防止冻裂。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">3</span>光学显微镜 / 体视显微镜<span class="arrow">▶</span></summary>
+      <div class="body">
+        <ul class="rules">
+          <li>样品轻拿轻放，避免磕碰载物台与物镜。</li>
+          <li>镜头污染时使用专用镜头纸，禁止用手或普通纸巾擦拭。</li>
+          <li>调节焦距时先粗后细，防止物镜压碎样品。</li>
+          <li>使用完毕关闭光源、罩上防尘罩，并在使用记录本上登记。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">4</span>精密电子天平<span class="arrow">▶</span></summary>
+      <div class="body">
+        <ul class="rules">
+          <li>使用前检查水平泡并调平，预热稳定后再称量。</li>
+          <li>样品须轻放于秤盘中央，使用去皮功能，禁止超过量程。</li>
+          <li>腐蚀性样品须使用容器密闭称量，洒落立即清理并报告。</li>
+          <li>称量数据当场记录，用毕清洁秤盘、关闭电源。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">5</span>手动探针台 / 半导体参数分析仪<span class="arrow">▶</span></summary>
+      <div class="body">
+        <p><span class="badge b-green">新增测试区</span><span class="badge b-blue">须防静电操作</span></p>
+        <ul class="rules">
+          <li>操作前佩戴防静电腕带并确认接地良好，测试样品放于防静电垫上。</li>
+          <li>探针落针须缓慢，避免撞针、划伤样品与针尖。</li>
+          <li>测试前设置限流/限压保护，禁止盲目加高压。</li>
+          <li>裸片脆弱，夹持、移动须使用真空吸笔或镊子，禁止徒手按压。</li>
+          <li>测试完毕先关闭输出，再取下样品，关闭仪器电源并登记。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="step">6</span>通风橱 / 紧急洗眼器<span class="arrow">▶</span></summary>
+      <div class="body">
+        <ul class="rules">
+          <li>通风橱：实验前确认风机运转，窗口低于安全线；实验后继续运行数分钟。</li>
+          <li>紧急洗眼器：每周由管理员试水检查并记录；使用时撑开眼睑持续冲洗不少于 15 分钟。</li>
+          <li>洗眼器周围禁止堆物，保持随时可用。</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- 禁止事项 -->
+  <section id="forbid">
+    <h2><span class="dot"></span>四、严禁事项（红线）</h2>
+    <div class="card">
+      <ul class="rules ban">
+        <li>❌ 未经培训或无人监护，独自操作真空镀膜主机等高压工艺设备。</li>
+        <li>❌ 擅自修改设备工艺参数、程序或拆除安全护栏、警示标识。</li>
+        <li>❌ 在实验室内饮食、吸烟或存放食品。</li>
+        <li>❌ 占用、堵塞安全通道，遮挡消防器材与洗眼器。</li>
+        <li>❌ 擅自挪用、玩弄消防器材与防护用品。</li>
+        <li>❌ 将实验室设备、样品、化学品带出实验室。</li>
+        <li>❌ 发生异常隐瞒不报、擅自处理或继续使用故障设备。</li>
+      </ul>
+    </div>
+    <div class="alert alert-red">
+      违反上述红线者，立即停止其使用资格并上报指导教师处理；造成事故的，按学校有关规定追究责任。
+    </div>
+  </section>
+
+  <!-- 应急处置 -->
+  <section id="emergency">
+    <h2><span class="dot"></span>五、应急处置</h2>
+    <div class="card">
+      <h3><span class="ico">🚨</span>记住三条原则</h3>
+      <ul class="rules">
+        <li><b>先断源、后处置：</b>先断电/关阀，再处理伤情与现场。</li>
+        <li><b>先救人、后救物：</b>人员安全永远优先于设备与样品。</li>
+        <li><b>先报告、不隐瞒：</b>任何事故（无论大小）第一时间报告教师/管理员。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">👁️</span>化学品入眼 / 皮肤接触</h3>
+      <ul class="rules">
+        <li>立即就近使用紧急洗眼器，撑开眼睑持续冲洗 <b>不少于 15 分钟</b>，皮肤接触用大量清水冲洗。</li>
+        <li>冲洗同时呼救，由他人联系教师并视情况送医。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🔥</span>起火</h3>
+      <ul class="rules">
+        <li>立即切断相关设备电源，使用就近灭火器扑救初起火灾。</li>
+        <li>火势失控立即撤离并关闭房门，拨打 119，切勿乘坐电梯。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">⚡</span>触电</h3>
+      <ul class="rules">
+        <li>第一时间断电；无法断电时用干燥绝缘物挑开电源，<b>严禁徒手直接拉拽触电者</b>。</li>
+        <li>脱离电源后视情况实施心肺复苏并拨打 120。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🩹</span>割伤 / 烫伤</h3>
+      <ul class="rules">
+        <li>割伤：清水冲洗后压迫止血，包扎；玻璃碎片不得徒手抠捡。</li>
+        <li>烫伤：流动冷水冲淋降温，勿涂抹牙膏等异物，严重者送医。</li>
+      </ul>
+    </div>
+    <div class="tel">
+      <b>紧急电话：119 / 120 / 110</b>
+      <p>实验室管理员：<span class="blank">＿＿＿＿＿＿＿＿＿＿</span></p>
+      <p>指导教师：<span class="blank">＿＿＿＿＿＿＿＿＿＿</span>　　学院值班室：<span class="blank">＿＿＿＿＿＿＿＿</span></p>
+    </div>
+  </section>
+
+  <!-- 联系登记 -->
+  <section id="contact">
+    <h2><span class="dot"></span>六、使用登记与联系</h2>
+    <div class="card">
+      <ul class="rules">
+        <li>实验室开放时间：<span class="blank">＿＿＿＿＿＿＿＿＿＿</span>（按学院通知为准）</li>
+        <li>预约方式：经任课教师/管理员同意后在登记本登记，或通过实验室管理群申请。</li>
+        <li>设备故障报修：联系管理员并在《设备维修登记表》上写明故障现象。</li>
+        <li>本指南将随设备升级更新，最新版本以线上页面为准。</li>
+      </ul>
+    </div>
+    <div class="alert alert-blue">
+      💡 建议每位同学将本页面<strong>收藏到手机</strong>：扫码进入后，点击浏览器菜单选择「添加到主屏幕」，下次一键直达。
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p class="labname">半导体工艺与集成电路测试实训实验室 · 使用规范与操作指南</p>
+  <p>主题：一片芯片的诞生 ｜ 计算机科学与技术专业实训平台</p>
+  <p>本页面内容由实验室安全管理制度整理，如有更新以现场公示为准</p>
+</footer>
+
+</body>
+</html>
