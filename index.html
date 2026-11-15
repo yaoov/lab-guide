@@ -262,7 +262,18 @@
     overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 30px -18px #000;
   }
   .qrwrap img{width:100%;height:100%;object-fit:contain;display:block}
+  [hidden]{display:none!important}
   .qrwrap .ph{padding:10px;font-size:11.5px;line-height:1.6;color:#5a6a80;text-align:center}
+  .qrwrap.guide{
+    background:linear-gradient(160deg,rgba(34,211,238,.10),rgba(124,92,255,.10));
+    border:1px dashed rgba(34,211,238,.4);box-shadow:none;
+  }
+  .qrwrap.guide .ph{padding:14px 12px;color:#cfe0f5;font-size:12px;line-height:1.75}
+  .qrwrap.guide .ph .ic{display:block;font-size:26px;margin-bottom:6px}
+  .qrwrap.guide .ph b{display:block;color:#9fe8f6;font-size:13px;letter-spacing:.5px;margin-bottom:2px}
+  .qrwrap.guide .ph .nm{display:inline-block;margin:4px 0 6px;padding:3px 10px;border-radius:999px;
+    background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.4);color:#fff;font-weight:700;font-size:12.5px}
+  .qrwrap.guide .ph em{display:block;font-style:normal;color:var(--sub);font-size:11px;margin-top:4px}
   .sheet-card .sh{font-size:12px;color:#bfe9f5;line-height:1.6}
   .sheet-card .op{display:flex;gap:8px;margin-top:14px}
   .sheet-card .op button{
@@ -512,7 +523,7 @@
       <span class="bico">📅</span>
       <div>
         <h3>在线预约</h3>
-        <p>微信小程序 · 选择时段 · 提交即预约</p>
+        <p>微信小程序「东软实验中心」· 实验室预约</p>
       </div>
       <button class="btn-book" id="btnBook" type="button">去预约</button>
     </div>
@@ -524,15 +535,16 @@
   <div class="sheet" id="mpSheet" aria-hidden="true">
     <div class="mask" data-close></div>
     <div class="sheet-card" role="dialog" aria-modal="true" aria-label="预约小程序">
-      <h3>预约小程序</h3>
-      <p class="st">选择实验时段 · 查看预约记录</p>
-      <div class="qrwrap" id="mpQrWrap">
-        <img id="mpCode" src="img/mini-code.png" alt="预约小程序码">
+      <h3 id="mpTitle">预约小程序</h3>
+      <p class="st">东软实验中心 · 实验室预约</p>
+      <div class="qrwrap guide" id="mpQrWrap">
+        <img id="mpCode" alt="预约小程序码" hidden>
+        <div class="ph" id="mpPh"></div>
       </div>
-      <p class="sh" id="mpHint">长按上方小程序码 → 识别小程序即可进入</p>
+      <p class="sh" id="mpHint"></p>
       <div class="op">
         <button type="button" data-close>关闭</button>
-        <button type="button" class="primary" id="btnCopyLink">复制小程序链接</button>
+        <button type="button" class="primary" id="btnCopyLink">复制小程序名称</button>
       </div>
     </div>
   </div>
@@ -688,24 +700,47 @@
 
   /* ===== 微信小程序预约 ===== */
   var MP = {
+    name: '东软实验中心',          // 小程序名称（用于搜索引导）
     appId: '',                     // 小程序 AppID（微信内配合公众号 JS-SDK 才可一键跳转）
     path: 'pages/booking/index',   // 小程序页面路径
     shortLink: '',                 // 小程序短链，如 https://wxaurl.cn/xxxxxx（填了就能直接跳）
-    codeImg: 'img/mini-code.png'   // 小程序码图片，放在 img/ 下即可自动显示
+    codeImg: ''                    // 小程序码图片，如 img/mini-code.png（填了优先显示码）
   };
   var inWx = /MicroMessenger/i.test(navigator.userAgent);
   var sheet = document.getElementById('mpSheet');
   var btnBook = document.getElementById('btnBook');
   var mpCode = document.getElementById('mpCode');
   var mpHint = document.getElementById('mpHint');
+  var mpPh = document.getElementById('mpPh');
   var qrWrap = document.getElementById('mpQrWrap');
+  var btnCopy = document.getElementById('btnCopyLink');
 
-  function openSheet(tip){
-    if(MP.shortLink && !inWx){
-      mpHint.textContent = '当前不在微信内：请长按小程序码识别，或在微信中打开本页。';
-    } else if(tip){
-      mpHint.textContent = tip;
+  function renderSheet(){
+    if(MP.codeImg){
+      mpCode.hidden = false;
+      qrWrap.classList.remove('guide');
+      if(mpPh) mpPh.hidden = true;
+      mpCode.src = MP.codeImg;
+      mpHint.textContent = '长按上方小程序码 → 识别小程序即可进入';
+      btnCopy.textContent = '复制小程序链接';
+      return;
     }
+    mpCode.hidden = true;
+    qrWrap.classList.add('guide');
+    if(mpPh){
+      mpPh.hidden = false;
+      mpPh.innerHTML = '<span class="ic">🔍</span><b>微信搜索小程序</b>' +
+        '<span class="nm">' + MP.name + '</span>' +
+        '<em>进入「实验室」→ 选择实验室 → 预约</em>';
+    }
+    mpHint.textContent = inWx
+      ? '也可点击右上角「···」→ 搜索小程序名称直接进入'
+      : '请打开微信 → 发现 → 小程序 → 搜索上方名称';
+    btnCopy.textContent = '复制小程序名称';
+  }
+
+  function openSheet(){
+    renderSheet();
     if(sheet){ sheet.classList.add('on'); sheet.setAttribute('aria-hidden','false'); }
   }
   function closeSheet(){
@@ -714,15 +749,16 @@
 
   if(mpCode){
     mpCode.addEventListener('error', function(){
-      qrWrap.innerHTML = '<div class="ph">小程序码待配置<br>把小程序码保存为<br><b>img/mini-code.png</b><br>即可自动显示</div>';
+      MP.codeImg = '';
+      renderSheet();
     });
-    if(MP.codeImg && mpCode.getAttribute('src') !== MP.codeImg) mpCode.src = MP.codeImg;
   }
+  renderSheet();
 
   if(btnBook){
     btnBook.addEventListener('click', function(){
       if(MP.shortLink && inWx){ window.location.href = MP.shortLink; return; }
-      openSheet(MP.shortLink ? '' : '长按小程序码识别进入；管理员在页面中填写小程序码或短链后自动生效。');
+      openSheet();
     });
   }
 
@@ -735,10 +771,9 @@
     });
   }
 
-  var btnCopy = document.getElementById('btnCopyLink');
   if(btnCopy){
     btnCopy.addEventListener('click', function(){
-      var link = MP.shortLink || location.href;
+      var link = MP.shortLink || MP.name;
       var done = function(){
         var old = btnCopy.textContent;
         btnCopy.textContent = '已复制';
